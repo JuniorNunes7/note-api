@@ -1,0 +1,28 @@
+version: '3'
+services:
+  nest-app:
+    image: node
+    container_name: note-api-app
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: bash -c "npm install && npm run start:dev"
+    networks:
+      - nest-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: note-api-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    networks:
+      - nest-network
+
+networks:
+  nest-network:
+    driver: bridge
