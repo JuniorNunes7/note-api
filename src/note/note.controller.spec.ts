@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NoteController } from './note.controller';
 import { NoteService } from './note.service';
-const mocks = require('node-mocks-http');
 
 describe('NoteController', () => {
   let noteController: NoteController;
@@ -24,22 +23,14 @@ describe('NoteController', () => {
 
       jest.spyOn(noteService, 'getNote').mockImplementation(async () => expectedText);
   
-      const req = mocks.createRequest({
-        method: 'GET',
-        url: `/notes/${slug}`
-      })
-      const result = await noteController.getNote(req);
+      const result = await noteController.getNote({ slug });
 
       expect(result).toBe(expectedText);
     });
     it('should throw error if slug is empty', async () => {
       const slug = '';
 
-      const req = mocks.createRequest({
-        method: 'GET',
-        url: `/notes/${slug}`
-      })
-      await expect(noteController.getNote(req)).rejects.toThrow(Error);
+      await expect(noteController.getNote({slug})).rejects.toThrow(Error);
     });
   });
 });
