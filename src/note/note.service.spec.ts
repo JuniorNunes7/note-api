@@ -1,4 +1,4 @@
-import MongoDBConnector from '../mongodb.connector';
+import { MongoDBConnector } from '../mongodb.connector';
 import { NoteService } from './note.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
@@ -51,15 +51,24 @@ describe('NoteService', () => {
   });
 
 
-  // describe('updateNote', () => {
-  //   it('deve retornar true após a atualização da nota', () => {
-  //     const noteService = new NoteService();
-  //     const slug = 'test-slug';
-  //     const newText = 'Novo texto da nota';
+  describe('updateNote', () => {
+    it('should update a note', async () => {
+      const slug = 'test-slug';
+      const text = 'my-note';
+      const newText = 'new-note';
 
-  //     const result = noteService.updateNote(slug, newText);
+      mongoDBConnector.getDB()?.collection('notes').insertOne({
+        slug,
+        text
+      })
 
-  //     expect(result).toBe(true);
-  //   });
-  // });
+      const result = await noteService.updateNote(slug, newText);
+
+      expect(result).toBeTruthy();
+      
+      const updatedText = await noteService.getNote(slug);
+
+      expect(updatedText).toBe(newText);
+    });
+  });
 });

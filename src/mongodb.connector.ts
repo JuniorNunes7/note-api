@@ -1,10 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { MongoClient, Db } from 'mongodb';
 
-class MongoDBConnector {
+@Injectable()
+export class MongoDBConnector {
   private client: MongoClient;
   private db: Db | null;
 
-  constructor() {    
+  constructor() {
     this.client = new MongoClient(process.env.MONGO_URI || '');
     this.db = null;
   }
@@ -22,5 +24,3 @@ class MongoDBConnector {
     return this.db;
   }
 }
-
-export default MongoDBConnector;
